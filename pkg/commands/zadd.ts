@@ -41,7 +41,7 @@ export class ZAddCommand<TData = string> extends Command<
         | ScoreMember<TData>
         | ZAddCommandOptions
         | ZAddCommandOptionsWithIncr,
-      ...arg2: ScoreMember<TData>[],
+      ...arg2: ScoreMember<TData>[]
     ],
     opts?: CommandOptions<number | null, number | null>,
   ) {
