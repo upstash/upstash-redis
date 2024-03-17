@@ -51,10 +51,10 @@ export type RedisConfigNodejs = {
    * ```
    */
   /**
-   * The signal will allow aborting requests on the fly.
+   * The timeout(msec) will allow aborting requests on the fly.
    * For more check: https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal
    */
-  signal?: AbortSignal;
+  timeout?: number;
   agent?: any;
 } & core.RedisOptions &
   RequesterConfig;
@@ -125,7 +125,7 @@ export class Redis extends core.Redis {
       agent: configOrRequester.agent,
       responseEncoding: configOrRequester.responseEncoding,
       cache: configOrRequester.cache || "no-store",
-      signal: configOrRequester.signal,
+      timeout: configOrRequester.timeout,
     });
 
     super(client, {

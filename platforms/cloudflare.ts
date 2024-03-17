@@ -23,10 +23,10 @@ export type RedisConfigCloudflare = {
    */
   token: string;
   /**
-   * The signal will allow aborting requests on the fly.
-   * For more check: https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal
+   * The timeout(msec) will allow aborting requests on the fly.
+   * For more check: https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal/timeout_static
    */
-  signal?: AbortSignal;
+  timeout?: number;
 } & core.RedisOptions &
   RequesterConfig &
   Env;
@@ -71,7 +71,7 @@ export class Redis extends core.Redis {
       baseUrl: config.url,
       headers: { authorization: `Bearer ${config.token}` },
       responseEncoding: config.responseEncoding,
-      signal: config.signal,
+      timeout: config.timeout,
     });
 
     super(client, {

@@ -93,7 +93,7 @@ export type HttpClientConfig = {
   options?: Options;
   retry?: RetryConfig;
   agent?: any;
-  signal?: AbortSignal;
+  timeout?: number;
 } & RequesterConfig;
 
 export class HttpClient implements Requester {
@@ -102,7 +102,7 @@ export class HttpClient implements Requester {
   public readonly options: {
     backend?: string;
     agent: any;
-    signal?: AbortSignal;
+    timeout?: number;
     responseEncoding?: false | "base64";
     cache?: CacheSetting;
   };
@@ -118,7 +118,7 @@ export class HttpClient implements Requester {
       agent: config.agent,
       responseEncoding: config.responseEncoding ?? "base64", // default to base64
       cache: config.cache,
-      signal: config.signal,
+      timeout: config.timeout,
     };
 
     this.baseUrl = config.baseUrl.replace(/\/$/, "");
@@ -176,7 +176,10 @@ export class HttpClient implements Requester {
       body: JSON.stringify(req.body),
       keepalive: true,
       agent: this.options?.agent,
-      signal: this.options.signal,
+      signal:
+        this.options.timeout && this.options.timeout > 0
+          ? AbortSignal.timeout(this.options.timeout)
+          : null,
 
       /**
        * Fastly specific
@@ -191,13 +194,13 @@ export class HttpClient implements Requester {
         res = await fetch([this.baseUrl, ...(req.path ?? [])].join("/"), requestOptions);
         break;
       } catch (err) {
-        if (this.options.signal?.aborted) {
+        if (requestOptions.signal?.aborted) {
           const myBlob = new Blob([
-            JSON.stringify({ result: this.options.signal.reason ?? "Aborted" }),
+            JSON.stringify({ result: requestOptions.signal.reason ?? "Aborted" }),
           ]);
           const myOptions = {
             status: 200,
-            statusText: this.options.signal.reason ?? "Aborted",
+            statusText: requestOptions.signal.reason ?? "Aborted",
           };
           res = new Response(myBlob, myOptions);
           break;

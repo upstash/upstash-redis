@@ -1,4 +1,4 @@
-import { describe, expect, test } from "bun:test";
+import { describe, expect, mock, test, type Mock } from "bun:test";
 import { HttpClient } from "./http";
 
 import { newHttpClient } from "./test-utils";
@@ -35,15 +35,17 @@ describe(new URL("", import.meta.url).pathname, () => {
 
 describe("Abort", () => {
   test("should abort the request", async () => {
-    const controller = new AbortController();
-    const signal = controller.signal;
-
     const client = newHttpClient();
-    client.options.signal = signal;
+    client.options.timeout = 1000;
+
+    global.fetch = mock((_url, requestOptions) => {
+      requestOptions.signal = AbortSignal.abort("Abort works!");
+      return Promise.reject();
+    });
     const body = client.request({
       body: ["set", "name", "hezarfen"],
     });
-    controller.abort("Abort works!");
+    (global.fetch as Mock<typeof fetch>).mockClear();
 
     expect((await body).result).toEqual("Abort works!");
   });
