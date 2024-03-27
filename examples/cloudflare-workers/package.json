@@ -9,7 +9,7 @@
     "publish": "wrangler publish"
   },
   "devDependencies": {
-    "wrangler": "^2.20.0"
+    "wrangler": "^3.39.0"
   },
   "dependencies": {
     "@upstash/redis": "link:../../dist"
