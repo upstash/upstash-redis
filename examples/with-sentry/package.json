@@ -10,7 +10,7 @@
   "author": "Andreas Thomas",
   "license": "ISC",
   "dependencies": {
-    "@sentry/node": "^7.14.2",
+    "@sentry/node": "^8.13.0",
     "@upstash/redis": "latest",
     "isomorphic-fetch": "^3.0.0"
   }
