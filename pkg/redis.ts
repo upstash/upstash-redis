@@ -2,6 +2,7 @@ import { createAutoPipelineProxy } from "../pkg/auto-pipeline";
 import {
   AppendCommand,
   BitCountCommand,
+  BitFieldCommand,
   BitOpCommand,
   BitPosCommand,
   CommandOptions,
@@ -401,6 +402,24 @@ export class Redis {
       commandOptions: this.opts,
       multiExec: true,
     });
+
+  /**
+   * Returns an instance that can be used to execute `BITFIELD` commands on one key.
+   *
+   * @example
+   * ```typescript
+   * redis.set("mykey", 0);
+   * const result = await redis.bitfield("mykey")
+   *   .set("u4", 0, 16)
+   *   .incr("u4", "#1", 1)
+   *   .exec();
+   * console.log(result); // [0, 1]
+   * ```
+   *
+   * @see https://redis.io/commands/bitfield
+   */
+  bitfield = (...args: CommandArgs<typeof BitFieldCommand>) =>
+    new BitFieldCommand(args, this.client, this.opts);
 
   /**
    * @see https://redis.io/commands/append

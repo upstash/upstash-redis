@@ -1,5 +1,6 @@
 export * from "./append";
 export * from "./bitcount";
+export * from "./bitfield";
 export * from "./bitop";
 export * from "./bitpos";
 export * from "./command";
@@ -72,8 +73,8 @@ export * from "./lindex";
 export * from "./linsert";
 export * from "./llen";
 export * from "./lmove";
-export * from "./lpop";
 export * from "./lmpop";
+export * from "./lpop";
 export * from "./lpos";
 export * from "./lpush";
 export * from "./lpushx";

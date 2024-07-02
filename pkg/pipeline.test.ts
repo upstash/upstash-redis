@@ -123,6 +123,12 @@ describe("use all the things", () => {
 
     p.append(newKey(), "hello")
       .bitcount(newKey(), 0, 1)
+      .bitfield(newKey())
+      .set("u4", "#0", 15)
+      .get("u4", "#0")
+      .overflow("WRAP")
+      .incrby("u4", "#0", 10)
+      .exec()
       .bitop("and", newKey(), newKey())
       .bitpos(newKey(), 1, 0)
       .dbsize()
@@ -243,6 +249,6 @@ describe("use all the things", () => {
       .json.set(newKey(), "$", { hello: "world" });
 
     const res = await p.exec();
-    expect(res.length).toEqual(120);
+    expect(res.length).toEqual(121);
   });
 });
